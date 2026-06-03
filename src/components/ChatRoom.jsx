@@ -40,7 +40,7 @@ export default function ChatRoom({ userId }) {
             // Di frontend pelanggan, "user" itu kanan (pelanggan), "admin" itu kiri (admin).
             // Di frontend admin, "user" itu kanan (admin), "admin" itu kiri (pelanggan).
             // Maka, kita balik. Jika role pengirim adalah 'pelanggan', maka sender="admin" (kiri). Jika role pengirim adalah 'admin' atau 'kasir', maka sender="user" (kanan).
-            sender: (msg.pengirimId?.role === 'pelanggan') ? "admin" : "user",
+            sender: (msg.pengirim?.role === 'pelanggan') ? "admin" : "user",
             message: msg.isiPesan || msg.pesan,
             time: dateObj.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }),
             date: dateObj.toISOString().split("T")[0],

@@ -62,7 +62,7 @@ export default function CashierPage() {
     setCart((prev) => [...prev, { ...product, qty: 1 }]);
   };
 
-  const total = cart.reduce((sum, item) => sum + item.harga * item.qty, 0);
+  const total = cart.reduce((sum, item) => sum + (item.harga || 0) * item.qty, 0);
 
   const filteredProducts = products.filter((product) =>
     product.nama.toLowerCase().includes(search.toLowerCase())

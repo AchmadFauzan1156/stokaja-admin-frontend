@@ -122,7 +122,7 @@ export default function UsersPage() {
                   <span className={`rounded-full px-3 py-1 font-signika text-sm font-semibold 
                     ${u.role === 'admin' ? 'bg-red-100 text-red-700' : 
                       u.role === 'kasir' ? 'bg-blue-100 text-blue-700' : 'bg-gray-200 text-gray-700'}`}>
-                    {u.role.toUpperCase()}
+                    {(u.role || "").toUpperCase()}
                   </span>
                 </div>
                 <p className="mt-1 font-signika text-[#666]">{u.email}</p>

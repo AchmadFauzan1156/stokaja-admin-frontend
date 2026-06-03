@@ -143,8 +143,8 @@ export default function DashboardPage() {
         />
 
         <StatCard
-          title="Omzet"
-          value={`Rp${stats.revenue.toLocaleString("id-ID")}`}
+          title="Pendapatan"
+          value={`Rp${(stats.revenue || 0).toLocaleString("id-ID")}`}
         />
 
         <StatCard
@@ -486,17 +486,8 @@ export default function DashboardPage() {
                   {trx.pelangganId ? "Pelanggan Terdaftar" : "Pelanggan Offline"}
                 </p>
 
-                <p
-                  className="
-                    mt-1
-
-                    font-signika
-
-                    text-[#FF5C2B]
-                  "
-                >
-                  Rp
-                  {(trx.totalHarga || 0).toLocaleString("id-ID")}
+                <p className="mt-1 font-signika text-[#FF5C2B]">
+                  Rp{(trx.totalHarga || 0).toLocaleString("id-ID")}
                 </p>
 
               </button>
