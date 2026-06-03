@@ -1,6 +1,9 @@
-import ChatRoom
-from "@/components/ChatRoom";
+"use client";
+
+import { useParams } from "next/navigation";
+import ChatRoom from "@/components/ChatRoom";
 
 export default function Page() {
-  return <ChatRoom />;
+  const { id } = useParams();
+  return <ChatRoom userId={id} />;
 }

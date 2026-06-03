@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function ChatHeader() {
+export default function ChatHeader({ title = "Pelanggan", subtitle = "Online" }) {
 
   return (
     <div
@@ -61,7 +61,7 @@ export default function ChatHeader() {
             text-[#5F7026]
           "
         >
-          Toko StokAja
+          {title}
         </h1>
 
         <p
@@ -74,7 +74,7 @@ export default function ChatHeader() {
             text-[#6F6F6F]
           "
         >
-          Online
+          {subtitle}
         </p>
 
       </div>

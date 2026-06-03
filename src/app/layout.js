@@ -11,6 +11,7 @@ import {
 
 import { AuthProvider } from "@/context/AuthContext";
 import { ToastProvider } from "@/components/Toast";
+import GlobalSocketListener from "@/components/GlobalSocketListener";
 
 const squadaOne =
   Squada_One({
@@ -70,6 +71,7 @@ export default function RootLayout({
 
         <ToastProvider>
           <AuthProvider>
+            <GlobalSocketListener />
             <AdminProvider>
               <main
                 className="
