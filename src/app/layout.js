@@ -5,9 +5,6 @@ import {
 
 import "./globals.css";
 
-import {
-  AdminProvider,
-} from "@/context/AdminContext";
 
 import { AuthProvider } from "@/context/AuthContext";
 import { ToastProvider } from "@/components/Toast";
@@ -72,21 +69,19 @@ export default function RootLayout({
         <ToastProvider>
           <AuthProvider>
             <GlobalSocketListener />
-            <AdminProvider>
-              <main
-                className="
-                  relative
-                  mx-auto
-                  min-h-screen
-                  w-full
-                  max-w-full
-                  overflow-hidden
-                  bg-[#F6F3EA]
-                "
-              >
-                {children}
-              </main>
-            </AdminProvider>
+            <main
+              className="
+                relative
+                mx-auto
+                min-h-screen
+                w-full
+                max-w-full
+                overflow-hidden
+                bg-[#F6F3EA]
+              "
+            >
+              {children}
+            </main>
           </AuthProvider>
         </ToastProvider>
 

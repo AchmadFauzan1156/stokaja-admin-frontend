@@ -123,7 +123,7 @@ export default function CashierPage() {
                         "bg-blue-100 text-blue-700"
                       }
                     `}>
-                      {order.statusPesanan.toUpperCase()}
+                      {(order.statusPesanan || "").toUpperCase()}
                     </span>
                   </div>
                   <p className="mt-2 font-signika text-[#666]">
@@ -134,7 +134,7 @@ export default function CashierPage() {
                       {order.keranjang?.length || 0} item
                     </span>
                     <span className="font-squadaOne text-[22px] text-[#FF5C2B]">
-                      Rp{order.totalHarga.toLocaleString("id-ID")}
+                      Rp{(order.totalHarga || 0).toLocaleString("id-ID")}
                     </span>
                   </div>
                 </div>

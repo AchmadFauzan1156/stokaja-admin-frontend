@@ -73,7 +73,7 @@ export default function ReportsPage() {
 
   const exportExcel = async () => {
     try {
-      const token = localStorage.getItem("adminToken");
+      const token = localStorage.getItem("accessToken");
       const url = `${process.env.NEXT_PUBLIC_API_URL}/transaksi/laporan/excel`;
       
       // Download directly via window.open
@@ -179,7 +179,7 @@ export default function ReportsPage() {
                           {row.statusPesanan}
                         </span>
                       </td>
-                      <td className="p-3 font-signika">Rp{row.totalHarga.toLocaleString("id-ID")}</td>
+                      <td className="p-3 font-signika">Rp{(row.totalHarga || 0).toLocaleString("id-ID")}</td>
                     </tr>
                   ))}
                   {reportData.length === 0 && (

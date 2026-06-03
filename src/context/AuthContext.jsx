@@ -69,7 +69,7 @@ export function AuthProvider({ children }) {
 
   // --- LOGIN ---
   const login = async (email, password) => {
-    const res = await apiPost("/login", { email, password });
+    const res = await apiPost("/auth/login", { email, password });
 
     if (res.success && res.data) {
       setTokens(res.data.accessToken, res.data.refreshToken);
@@ -94,7 +94,7 @@ export function AuthProvider({ children }) {
   // --- LOGOUT ---
   const logout = async () => {
     try {
-      await apiPost("/logout", {});
+      await apiPost("/auth/logout", {});
     } catch {
       // Tetap lanjut logout meskipun API error
     }

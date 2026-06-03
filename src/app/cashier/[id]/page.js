@@ -114,9 +114,9 @@ export default function OrderDetailPage() {
 
         <div className="mt-5 border-t border-[#EEE] pt-4">
           <p className="font-signika">Jumlah Item: {order.keranjang?.length || 0}</p>
-          <p className="mt-2 font-signika">Status: <span className="font-bold">{order.statusPesanan.toUpperCase()}</span></p>
+          <p className="mt-2 font-signika">Status: <span className="font-bold">{(order.statusPesanan || "").toUpperCase()}</span></p>
           <p className="mt-2 font-signika text-[#FF5C2B] font-bold">
-            Total Bayar: Rp{order.totalHarga.toLocaleString("id-ID")}
+            Total Bayar: Rp{(order.totalHarga || 0).toLocaleString("id-ID")}
           </p>
         </div>
 

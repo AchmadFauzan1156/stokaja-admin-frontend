@@ -274,7 +274,7 @@ export default function DashboardPage() {
             (item) => (
 
               <button
-                key={item.id}
+                key={item._id}
 
                 onClick={() =>
                   router.push(
@@ -407,7 +407,7 @@ export default function DashboardPage() {
             (trx) => (
 
               <button
-                key={trx.id}
+                key={trx._id}
 
                 onClick={() =>
                   router.push(
@@ -464,7 +464,7 @@ export default function DashboardPage() {
                   "
                 >
                   Rp
-                  {trx.totalHarga.toLocaleString("id-ID")}
+                  {(trx.totalHarga || 0).toLocaleString("id-ID")}
                 </p>
 
               </button>
