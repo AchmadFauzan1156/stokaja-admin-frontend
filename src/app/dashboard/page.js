@@ -154,6 +154,38 @@ export default function DashboardPage() {
 
       </div>
 
+      {/* Manajemen Data */}
+      <div className="mt-8 px-4">
+        <h2 className="mb-3 font-squadaOne text-[30px] text-[#6E822E]">
+          Manajemen Data
+        </h2>
+        <div className="grid grid-cols-3 gap-3">
+          <button 
+            onClick={() => router.push("/categories")}
+            className="flex flex-col items-center justify-center rounded-2xl border-2 border-[#D6D6D6] bg-[#F5F5F5] p-3 transition hover:border-[#B6D04E]"
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#E5F0B6] text-2xl">📁</div>
+            <span className="mt-2 text-center font-signika text-sm font-semibold text-[#444]">Kategori</span>
+          </button>
+          
+          <button 
+            onClick={() => router.push("/users")}
+            className="flex flex-col items-center justify-center rounded-2xl border-2 border-[#D6D6D6] bg-[#F5F5F5] p-3 transition hover:border-[#B6D04E]"
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#E5F0B6] text-2xl">👥</div>
+            <span className="mt-2 text-center font-signika text-sm font-semibold text-[#444]">Pengguna</span>
+          </button>
+          
+          <button 
+            onClick={() => router.push("/payments")}
+            className="flex flex-col items-center justify-center rounded-2xl border-2 border-[#D6D6D6] bg-[#F5F5F5] p-3 transition hover:border-[#B6D04E]"
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#E5F0B6] text-2xl">💳</div>
+            <span className="mt-2 text-center font-signika text-sm font-semibold text-[#444]">Metode Bayar</span>
+          </button>
+        </div>
+      </div>
+
       {/* Chart */}
       <div className="mt-8 px-4">
 
