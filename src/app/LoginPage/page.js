@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 
-import { useRouter }
-from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 import TextBox from "@/components/TextBox";
 import Button from "@/components/Button";
@@ -19,10 +19,9 @@ export default function LoginPage() {
   const [password, setPassword] =
     useState("");
 
-  const [
-    showError,
-    setShowError,
-  ] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const { login } = useAuth();
 
   const emailValid =
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -32,33 +31,22 @@ export default function LoginPage() {
     emailValid &&
     password.trim() !== "";
 
-  const handleLogin = () => {
-
-    const validEmail =
-      "admin@stokaja.com";
-
-    const validPassword =
-      "12345678";
-
-    if (
-      email !== validEmail ||
-      password !== validPassword
-    ) {
-
-      setShowError(true);
-
-      return;
+  const handleLogin = async () => {
+    setIsLoading(true);
+    try {
+      await login(email, password);
+      // AuthContext akan otomatis mengarahkan ke /dashboard
+    } catch (error) {
+      setErrorMessage(error.message || "Email atau password salah.");
+    } finally {
+      setIsLoading(false);
     }
-
-    router.push(
-      "/dashboard"
-    );
   };
 
   return (
     <>
       {/* Error Modal */}
-      {showError && (
+      {errorMessage && (
 
         <div
           className="
@@ -97,19 +85,8 @@ export default function LoginPage() {
               Login Gagal
             </h2>
 
-            <p
-              className="
-                mt-3
-
-                font-signika
-                text-[18px]
-
-                text-[#555]
-              "
-            >
-              Email atau password
-              yang Anda masukkan
-              salah.
+            <p className="mt-3 font-signika text-[18px] text-[#555]">
+              {errorMessage}
             </p>
 
             <div
@@ -124,11 +101,7 @@ export default function LoginPage() {
               <Button
                 text="OK"
 
-                onClick={() =>
-                  setShowError(
-                    false
-                  )
-                }
+                onClick={() => setErrorMessage("")}
               />
 
             </div>
@@ -222,21 +195,11 @@ export default function LoginPage() {
 
         </div>
 
-        {/* Login Button */}
         <Button
-          text="Log In"
-
-          onClick={
-            handleLogin
-          }
-
-          disabled={!formValid}
-
-          className="
-            mt-16
-
-            leading-none
-          "
+          text={isLoading ? "Loading..." : "Log In"}
+          onClick={handleLogin}
+          disabled={!formValid || isLoading}
+          className="mt-16 leading-none"
         />
 
       </div>

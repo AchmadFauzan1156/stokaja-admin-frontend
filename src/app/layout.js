@@ -9,6 +9,9 @@ import {
   AdminProvider,
 } from "@/context/AdminContext";
 
+import { AuthProvider } from "@/context/AuthContext";
+import { ToastProvider } from "@/components/Toast";
+
 const squadaOne =
   Squada_One({
     subsets: ["latin"],
@@ -65,29 +68,25 @@ export default function RootLayout({
         `}
       >
 
-        <AdminProvider>
-
-          <main
-            className="
-              relative
-
-              mx-auto
-
-              min-h-screen
-              w-full
-              max-w-full
-
-              overflow-hidden
-
-              bg-[#F6F3EA]
-            "
-          >
-
-            {children}
-
-          </main>
-
-        </AdminProvider>
+        <ToastProvider>
+          <AuthProvider>
+            <AdminProvider>
+              <main
+                className="
+                  relative
+                  mx-auto
+                  min-h-screen
+                  w-full
+                  max-w-full
+                  overflow-hidden
+                  bg-[#F6F3EA]
+                "
+              >
+                {children}
+              </main>
+            </AdminProvider>
+          </AuthProvider>
+        </ToastProvider>
 
       </body>
 
