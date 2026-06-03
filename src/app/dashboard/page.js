@@ -1,41 +1,90 @@
-"use client";
-
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
-import {
-  useAdmin,
-}
-from "@/context/AdminContext";
-
+import { useAuth } from "@/context/AuthContext";
+import { apiGet } from "@/lib/api";
 import Navbar from "@/components/Navbar";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer
+} from "recharts";
 
 export default function DashboardPage() {
-
   const router = useRouter();
+  const { user } = useAuth();
 
-  const {
-  products,
-  orders,
-  contacts,
+  const [isLoading, setIsLoading] = useState(true);
+  const [stats, setStats] = useState({
+    incomingOrders: 0,
+    totalProducts: 0,
+    revenue: 0,
+    unreadMessages: 0,
+  });
+  const [lowStocks, setLowStocks] = useState([]);
+  const [latestTransactions, setLatestTransactions] = useState([]);
+  const [chartData, setChartData] = useState([]);
 
-  lowStockProducts,
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        setIsLoading(true);
+        // 1. Pesanan masuk
+        const resOrders = await apiGet("/transaksi?status=menunggu&limit=1");
+        
+        // 2. Produk total & low stock
+        const resProducts = await apiGet("/produk?limit=100");
+        const allProducts = resProducts.data || [];
+        const low = allProducts.filter(p => p.stok > 0 && p.stok <= (p.stokMinimum || 5));
+        
+        // 3. Omzet dari Laporan
+        const resLaporan = await apiGet("/laporan");
+        
+        // 4. Transaksi Terbaru
+        const resLatest = await apiGet("/transaksi?limit=3");
+        
+        // 5. Data Grafik
+        const resGrafik = await apiGet("/grafik");
 
-  incomingOrders,
+        setStats({
+          incomingOrders: resOrders.total || 0,
+          totalProducts: resProducts.total || 0,
+          revenue: resLaporan.totalPendapatan || 0,
+          unreadMessages: 0, // Belum ada API untuk chat unread
+        });
 
-  revenue,
+        setLowStocks(low);
+        setLatestTransactions(resLatest.data || []);
+        
+        // Format chart data
+        const formattedChart = (resGrafik.data || []).map(item => ({
+          name: item._id, // Format YYYY-MM-DD
+          Pendapatan: item.totalPendapatan,
+          Keuntungan: item.totalKeuntungan
+        }));
+        setChartData(formattedChart);
 
-  unreadMessages,
-} = useAdmin();
+      } catch (error) {
+        console.error("Gagal memuat dashboard:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  const lowStocks =
-  products.filter(
-    (product) =>
-      product.stock > 0 &&
-      product.stock <= 5
-  );
+    fetchDashboardData();
+  }, []);
 
-  const latestTransactions =
-  orders.slice(-3).reverse();
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[#F0E7D6] flex justify-center items-center">
+        <LoadingSpinner size="lg" />
+      </div>
+    );
+  }
 
   return (
     <div
@@ -83,26 +132,24 @@ export default function DashboardPage() {
       >
 
         <StatCard
-  title="Pesanan"
-  value={incomingOrders}
-/>
+          title="Pesanan"
+          value={stats.incomingOrders}
+        />
 
-<StatCard
-  title="Produk"
-  value={products.length}
-/>
+        <StatCard
+          title="Produk"
+          value={stats.totalProducts}
+        />
 
-<StatCard
-  title="Omzet"
-  value={`Rp${revenue.toLocaleString(
-    "id-ID"
-  )}`}
-/>
+        <StatCard
+          title="Omzet"
+          value={`Rp${stats.revenue.toLocaleString("id-ID")}`}
+        />
 
-<StatCard
-  title="Chat"
-  value={unreadMessages}
-/>
+        <StatCard
+          title="Chat"
+          value={stats.unreadMessages}
+        />
 
       </div>
 
@@ -135,37 +182,37 @@ export default function DashboardPage() {
           "
         >
 
-          <div
-            className="
-              flex
-              h-52
-
-              items-center
-              justify-center
-
-              rounded-[18px]
-
-              border-2
-              border-dashed
-              border-[#C8C8C8]
-            "
-          >
-
-            <p
+          {chartData.length > 0 ? (
+            <div className="h-64 w-full mt-4">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={chartData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                  <YAxis tick={{ fontSize: 12 }} />
+                  <Tooltip />
+                  <Line type="monotone" dataKey="Pendapatan" stroke="#6E822E" strokeWidth={3} />
+                  <Line type="monotone" dataKey="Keuntungan" stroke="#FF5C2B" strokeWidth={3} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          ) : (
+            <div
               className="
-                text-center
-
-                font-signika
-                text-[18px]
-
-                text-[#888]
+                flex
+                h-52
+                items-center
+                justify-center
+                rounded-[18px]
+                border-2
+                border-dashed
+                border-[#C8C8C8]
               "
             >
-              Chart akan muncul
-              setelah integrasi backend
-            </p>
-
-          </div>
+              <p className="text-center font-signika text-[18px] text-[#888]">
+                Belum ada data grafik
+              </p>
+            </div>
+          )}
 
         </div>
 
@@ -260,7 +307,7 @@ export default function DashboardPage() {
                       text-[#4B4B4B]
                     "
                   >
-                    {item.name}
+                    {item.nama}
                   </h3>
 
                   <p
@@ -272,7 +319,7 @@ export default function DashboardPage() {
                   >
                     Sisa stok:
                     {" "}
-                    {item.stock}
+                    {item.stok}
                   </p>
 
                 </div>
@@ -389,7 +436,7 @@ export default function DashboardPage() {
                     text-[#4B4B4B]
                   "
                 >
-                  {trx.id}
+                  {trx.nomorResi}
                 </h3>
 
                 <p
@@ -403,7 +450,7 @@ export default function DashboardPage() {
                 >
                   Pelanggan:
                   {" "}
-                  {trx.customer}
+                  {trx.pelangganId ? "Pelanggan Terdaftar" : "Pelanggan Offline"}
                 </p>
 
                 <p
@@ -416,9 +463,7 @@ export default function DashboardPage() {
                   "
                 >
                   Rp
-                  {trx.total.toLocaleString(
-                    "id-ID"
-                  )}
+                  {trx.totalHarga.toLocaleString("id-ID")}
                 </p>
 
               </button>
