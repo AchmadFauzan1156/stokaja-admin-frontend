@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Navbar from "@/components/Navbar";
 import { apiGet, API_URL } from "@/lib/api";
 import { useToast } from "@/components/Toast";
@@ -26,7 +26,7 @@ export default function ReportsPage() {
   const [totalRevenue, setTotalRevenue] = useState(0);
   const [totalProfit, setTotalProfit] = useState(0);
 
-  const fetchReports = async () => {
+  const fetchReports = useCallback(async () => {
     setIsLoading(true);
     try {
       let query = "";
@@ -65,11 +65,11 @@ export default function ReportsPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [filter, showError]);
 
   useEffect(() => {
     fetchReports();
-  }, [filter]);
+  }, [fetchReports]);
 
   const exportExcel = async () => {
     try {

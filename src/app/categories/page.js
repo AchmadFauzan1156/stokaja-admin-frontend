@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { apiGet, apiPost, apiPut, apiDelete } from "@/lib/api";
 import Navbar from "@/components/Navbar";
@@ -24,7 +24,7 @@ export default function CategoriesPage() {
   const [description, setDescription] = useState("");
   const [isActive, setIsActive] = useState(true);
 
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     try {
       setIsLoading(true);
       const res = await apiGet("/kategori");
@@ -34,11 +34,11 @@ export default function CategoriesPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [showError]);
 
   useEffect(() => {
     fetchCategories();
-  }, []);
+  }, [fetchCategories]);
 
   const openAddModal = () => {
     setEditingId(null);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { apiGet, apiPost, apiPut, apiDelete } from "@/lib/api";
 import Navbar from "@/components/Navbar";
@@ -23,7 +23,7 @@ export default function PaymentsPage() {
   const [name, setName] = useState("");
   const [isActive, setIsActive] = useState(true);
 
-  const fetchPayments = async () => {
+  const fetchPayments = useCallback(async () => {
     try {
       setIsLoading(true);
       const res = await apiGet("/metode-bayar");
@@ -33,11 +33,11 @@ export default function PaymentsPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [showError]);
 
   useEffect(() => {
     fetchPayments();
-  }, []);
+  }, [fetchPayments]);
 
   const openAddModal = () => {
     setEditingId(null);

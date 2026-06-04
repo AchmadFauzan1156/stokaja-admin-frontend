@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import Button from "@/components/Button";
@@ -19,7 +19,7 @@ export default function CashierPage() {
   const [cart, setCart] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
     try {
       setIsLoadingOrders(true);
       // Fetch pesanan dengan status 'menunggu', 'diproses', 'dikirim' (yang belum selesai)
@@ -33,21 +33,21 @@ export default function CashierPage() {
     } finally {
       setIsLoadingOrders(false);
     }
-  };
+  }, []);
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     try {
       const res = await apiGet("/produk?limit=100");
       setProducts(res.data || []);
     } catch (error) {
       console.error("Gagal memuat produk", error);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchOrders();
     fetchProducts();
-  }, []);
+  }, [fetchOrders, fetchProducts]);
 
   const addProduct = (product) => {
     const existing = cart.find((item) => item._id === product._id);
@@ -65,7 +65,7 @@ export default function CashierPage() {
   const total = cart.reduce((sum, item) => sum + (item.harga || 0) * item.qty, 0);
 
   const filteredProducts = products.filter((product) =>
-    product.nama.toLowerCase().includes(search.toLowerCase())
+    (product.nama || "").toLowerCase().includes(search.toLowerCase())
   );
 
   const submitTransaction = async () => {

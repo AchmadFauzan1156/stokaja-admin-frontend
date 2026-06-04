@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { apiGet, apiPost, apiPut, apiDelete } from "@/lib/api";
 import Navbar from "@/components/Navbar";
@@ -23,7 +23,7 @@ export default function UsersPage() {
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("kasir");
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       setIsLoading(true);
       const res = await apiGet("/users");
@@ -33,11 +33,11 @@ export default function UsersPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [showError]);
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [fetchUsers]);
 
   const openAddModal = () => {
     setName("");

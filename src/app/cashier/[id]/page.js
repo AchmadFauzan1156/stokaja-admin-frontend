@@ -20,13 +20,9 @@ export default function OrderDetailPage() {
     const fetchOrderDetails = async () => {
       try {
         setIsLoading(true);
-        // Backend saat ini cuma punya daftar transaksi atau history, tidak punya `GET /transaksi/:id` khusus.
-        // Kita bisa ambil semua transaksi dan memfilternya, atau jika backend memanggil dari req params kita sesuaikan.
-        // Coba cari dari daftar `GET /transaksi` karena admin bisa akses.
-        const res = await apiGet("/transaksi?limit=1000"); // Ambil banyak dan cari
-        const foundOrder = res.data?.find(o => o._id === id);
-        if (foundOrder) {
-          setOrder(foundOrder);
+        const res = await apiGet(`/transaksi/${id}`);
+        if (res.data) {
+          setOrder(res.data);
         } else {
           showError("Pesanan tidak ditemukan");
         }

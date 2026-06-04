@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Navbar from "@/components/Navbar";
 import Button from "@/components/Button";
 import LoadingSpinner from "@/components/LoadingSpinner";
@@ -32,7 +32,7 @@ export default function StockPage() {
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setIsLoading(true);
       if (activeTab === "produk") {
@@ -47,9 +47,9 @@ export default function StockPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [activeTab, showError]);
 
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     try {
       const res = await apiGet("/kategori");
       setCategories(res.data || []);
@@ -57,14 +57,16 @@ export default function StockPage() {
       console.error("Gagal memuat kategori", error);
     }
   };
-
-  useEffect(() => {
-    fetchCategories();
+    }
   }, []);
 
   useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
+
+  useEffect(() => {
     fetchData();
-  }, [activeTab]);
+  }, [fetchData]);
 
   const getCategoryStyle = (categoryName) => {
     switch (categoryName?.toLowerCase()) {
