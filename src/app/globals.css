@@ -1,15 +1,8 @@
 @import "tailwindcss";
 
-h1 {
-  font-family: var(--font-squadaOne);;
-}
-
-.font-squadaOne {
-  font-family: var(--font-squadaOne);
-}
-
-.font-signika {
-  font-family: var(--font-signika);
+@theme {
+  --font-squadaOne: var(--font-squadaOne);
+  --font-signika: var(--font-signika);
 }
 
 .scrollbar-hide::-webkit-scrollbar {
