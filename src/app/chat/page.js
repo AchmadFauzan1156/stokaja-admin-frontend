@@ -31,13 +31,13 @@ export default function ChatPage() {
 
     const socket = getSocket();
     if (socket) {
-      socket.on("receiveMessage", () => {
+      socket.on("receive_message", () => {
         // Refresh contacts to update unread badge and last message when new message arrives
         fetchContacts();
       });
 
       return () => {
-        socket.off("receiveMessage");
+        socket.off("receive_message");
       };
     }
   }, []);

@@ -71,12 +71,12 @@ export default function ChatRoom({ userId }) {
       
       const handleReceive = (data) => {
         // Jika pesan datang dari pelanggan ini (userId) atau kita yang kirim
-        if (data.pengirimId === userId || data.penerimaId === userId) {
+        if (data.pengirim === userId || data.penerima === userId) {
           const dateObj = new Date(data.createdAt || Date.now());
           const newChat = {
             id: data._id || Date.now(),
-            sender: data.pengirimRole === 'pelanggan' ? "admin" : "user",
-            message: data.isiPesan || data.pesan,
+            sender: data.pengirim === userId ? "admin" : "user",
+            message: data.isiPesan,
             time: dateObj.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }),
             date: dateObj.toISOString().split("T")[0],
           };
@@ -85,16 +85,16 @@ export default function ChatRoom({ userId }) {
           scrollToBottom();
 
           // Mark this new message as read if it's from customer
-          if (data.pengirimRole === 'pelanggan' && data._id) {
+          if (data.pengirim === userId && data._id) {
             apiPatch(`/chat/${data._id}/read`);
           }
         }
       };
 
-      socket.on("receiveMessage", handleReceive);
+      socket.on("receive_message", handleReceive);
 
       return () => {
-        socket.off("receiveMessage", handleReceive);
+        socket.off("receive_message", handleReceive);
       };
     }
   }, [userId, user]);

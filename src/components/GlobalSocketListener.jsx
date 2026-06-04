@@ -34,18 +34,18 @@ export default function GlobalSocketListener() {
       // Jangan tampilkan toast jika user sedang berada di halaman chat
       if (pathname && pathname.startsWith("/chat")) return;
 
-      // Jika ada pesan baru yang ditujukan ke role admin/kasir, atau pesan dari pelanggan
-      if (data.pengirimRole === "pelanggan") {
-        showSuccess(`Pesan baru dari Pelanggan: ${data.pesan}`);
+      // Jika pesan bukan dari diri sendiri (kasir/admin), tampilkan notifikasi
+      if (data.pengirim !== user.id) {
+        showSuccess(`Pesan baru dari Pelanggan: ${data.isiPesan}`);
       }
     };
 
     socket.on("alertAdmin", handleAlert);
-    socket.on("receiveMessage", handleNewMessage);
+    socket.on("receive_message", handleNewMessage);
 
     return () => {
       socket.off("alertAdmin", handleAlert);
-      socket.off("receiveMessage", handleNewMessage);
+      socket.off("receive_message", handleNewMessage);
     };
   }, [user, pathname, showSuccess, showError]);
 
