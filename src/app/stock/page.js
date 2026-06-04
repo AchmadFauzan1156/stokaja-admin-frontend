@@ -56,8 +56,6 @@ export default function StockPage() {
     } catch (error) {
       console.error("Gagal memuat kategori", error);
     }
-  };
-    }
   }, []);
 
   useEffect(() => {
