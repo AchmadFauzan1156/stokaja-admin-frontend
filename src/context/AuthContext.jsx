@@ -17,7 +17,6 @@ import {
   getAccessToken,
 } from "@/lib/api";
 
-import { mapUser } from "@/lib/mappers";
 import { disconnectSocket } from "@/lib/socket";
 
 const AuthContext = createContext();
@@ -35,7 +34,13 @@ export function AuthProvider({ children }) {
 
     try {
       const res = await apiGet("/profil");
-      setUser(mapUser(res.data));
+      const userData = {
+        id: res.data._id || res.data.id,
+        fullName: res.data.namaLengkap,
+        email: res.data.email,
+        role: res.data.role,
+      };
+      setUser(userData);
     } catch {
       clearTokens();
       setUser(null);
@@ -107,7 +112,12 @@ export function AuthProvider({ children }) {
   const refreshProfile = async () => {
     try {
       const res = await apiGet("/profil");
-      const mapped = mapUser(res.data);
+      const mapped = {
+        id: res.data._id || res.data.id,
+        fullName: res.data.namaLengkap,
+        email: res.data.email,
+        role: res.data.role,
+      };
       setUser(mapped);
       return mapped;
     } catch {
