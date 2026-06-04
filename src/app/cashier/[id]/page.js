@@ -125,7 +125,7 @@ export default function OrderDetailPage() {
           {order.keranjang?.map((item, idx) => (
             <div key={idx} className="flex justify-between mb-2 font-signika text-sm">
               <span>{item.produkId?.nama || item.produkId?.namaBahan || "Item Terhapus"} x{item.jumlahBeli}</span>
-              <span>Rp{(item.hargaSatuan * item.jumlahBeli).toLocaleString("id-ID")}</span>
+              <span>Rp{((item.hargaSatuan || 0) * item.jumlahBeli).toLocaleString("id-ID")}</span>
             </div>
           ))}
         </div>

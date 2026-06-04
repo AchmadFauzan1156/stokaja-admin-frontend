@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
-import { apiGet } from "@/lib/api";
+import { apiGet, API_URL } from "@/lib/api";
 import { useToast } from "@/components/Toast";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import {
@@ -74,7 +74,7 @@ export default function ReportsPage() {
   const exportExcel = async () => {
     try {
       const token = localStorage.getItem("accessToken");
-      const url = `${process.env.NEXT_PUBLIC_API_URL}/transaksi/laporan/excel`;
+      const url = `${API_URL}/transaksi/laporan/excel`;
       
       // Download directly via window.open
       // Wait, we need auth header. So fetch as blob.

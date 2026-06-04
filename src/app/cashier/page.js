@@ -167,7 +167,7 @@ export default function CashierPage() {
             >
               <div>
                 <h3 className="font-squadaOne text-[22px] text-[#4B4B4B]">{product.nama}</h3>
-                <p className="text-[#FF5C2B] font-signika">Rp{product.harga.toLocaleString("id-ID")}</p>
+                <p className="text-[#FF5C2B] font-signika">Rp{(product.harga || 0).toLocaleString("id-ID")}</p>
                 <p className="text-xs text-[#888] font-signika">Sisa: {product.stok}</p>
               </div>
               <div className="rounded-full bg-[#B6D04E] px-4 py-2 text-white font-bold">+</div>
@@ -189,7 +189,7 @@ export default function CashierPage() {
             cart.map((item) => (
               <div key={item._id} className="mb-3 flex justify-between font-signika">
                 <span>{item.nama} x{item.qty}</span>
-                <span>Rp{(item.harga * item.qty).toLocaleString("id-ID")}</span>
+                <span>Rp{((item.harga || 0) * item.qty).toLocaleString("id-ID")}</span>
               </div>
             ))
           )}
