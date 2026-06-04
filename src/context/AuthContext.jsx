@@ -40,7 +40,13 @@ export function AuthProvider({ children }) {
         email: res.data.email,
         role: res.data.role,
       };
-      setUser(userData);
+      
+      if (userData.role === "pelanggan") {
+        clearTokens();
+        setUser(null);
+      } else {
+        setUser(userData);
+      }
     } catch {
       clearTokens();
       setUser(null);
@@ -85,6 +91,11 @@ export function AuthProvider({ children }) {
         email: res.data.user.email,
         role: res.data.user.role,
       };
+
+      if (userData.role === "pelanggan") {
+        clearTokens();
+        throw new Error("Akses ditolak! Aplikasi ini khusus Admin & Kasir.");
+      }
 
       localStorage.setItem("user", JSON.stringify(userData));
       setUser(userData);
