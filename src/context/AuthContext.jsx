@@ -33,7 +33,7 @@ export function AuthProvider({ children }) {
     }
 
     try {
-      const res = await apiGet("/profil");
+      const res = await apiGet("/users/profil");
       const userData = {
         id: res.data._id || res.data.id,
         fullName: res.data.namaLengkap,
@@ -74,7 +74,7 @@ export function AuthProvider({ children }) {
 
   // --- LOGIN ---
   const login = async (email, password) => {
-    const res = await apiPost("/auth/login", { email, password });
+    const res = await apiPost("/login", { email, password });
 
     if (res.success && res.data) {
       setTokens(res.data.accessToken, res.data.refreshToken);
@@ -99,7 +99,7 @@ export function AuthProvider({ children }) {
   // --- LOGOUT ---
   const logout = async () => {
     try {
-      await apiPost("/auth/logout", {});
+      await apiPost("/logout", {});
     } catch {
       // Tetap lanjut logout meskipun API error
     }
@@ -111,7 +111,7 @@ export function AuthProvider({ children }) {
   // --- REFRESH PROFIL ---
   const refreshProfile = async () => {
     try {
-      const res = await apiGet("/profil");
+      const res = await apiGet("/users/profil");
       const mapped = {
         id: res.data._id || res.data.id,
         fullName: res.data.namaLengkap,
