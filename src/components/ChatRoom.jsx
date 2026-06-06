@@ -28,7 +28,7 @@ export default function ChatRoom({ userId }) {
           if (contact) setContactName(contact.nama || contact.email || "Pelanggan");
         }).catch(err => console.error("Gagal load kontak", err));
 
-        const res = await apiGet(`/chat/history?userId=${userId}`);
+        const res = await apiGet(`/chat/history?pelangganId=${userId}`);
         
         const formattedChats = (res.data || []).map((msg) => {
           const dateObj = new Date(msg.createdAt);

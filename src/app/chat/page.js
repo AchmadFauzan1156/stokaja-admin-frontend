@@ -43,7 +43,7 @@ export default function ChatPage() {
   }, []);
 
   const filteredContacts = contacts.filter((contact) =>
-    (contact.nama || contact.email || "").toLowerCase().includes(search.toLowerCase())
+    (contact.pelanggan?.namaLengkap || contact.pelanggan?.email || "").toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -64,8 +64,8 @@ export default function ChatPage() {
         ) : (
           filteredContacts.map((contact) => (
             <button
-              key={contact._id}
-              onClick={() => router.push(`/chat/${contact._id}`)}
+              key={contact.pelanggan?._id || Math.random().toString()}
+              onClick={() => router.push(`/chat/${contact.pelanggan?._id}`)}
               className="flex items-center gap-4 border-b-2 border-[#D9D9D9] py-5 text-left"
             >
               <div className="flex h-15 w-15 shrink-0 items-center justify-center rounded-full bg-[#D9D9D9]">
@@ -76,7 +76,7 @@ export default function ChatPage() {
 
               <div className="flex-1 overflow-hidden">
                 <h2 className="truncate font-signika text-[20px] font-semibold text-[#6E822E]">
-                  {contact.nama || contact.email || "Pelanggan"}
+                  {contact.pelanggan?.namaLengkap || contact.pelanggan?.email || "Pelanggan"}
                 </h2>
                 <p className="mt-1 truncate font-signika text-[16px] text-[#888]">
                   {contact.pesanTerakhir}

@@ -116,12 +116,17 @@ export default function StockPage() {
       return;
     }
 
+    if (activeTab === "produk" && !categoryId) {
+      showError("Kategori produk wajib dipilih");
+      return;
+    }
+
     setIsSaving(true);
     try {
       const formData = new FormData();
       if (activeTab === "produk") {
         formData.append("nama", name);
-        if (categoryId) formData.append("kategori", categoryId);
+        formData.append("kategoriId", categoryId);
         formData.append("harga", price);
       } else {
         formData.append("namaBahan", name);
