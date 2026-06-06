@@ -107,22 +107,13 @@ export default function ChatRoom({ userId }) {
     const socket = getSocket();
     if (socket) {
       // Emit ke backend
-      socket.emit("sendMessage", {
-        penerimaId: userId,
+      socket.emit("send_message", {
+        penerima: userId,
         pesan: message
       });
 
-      // Optimistic update
-      const now = new Date();
-      const newChat = {
-        id: Date.now(),
-        sender: "user", // Kanan
-        message,
-        time: now.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }),
-        date: now.toISOString().split("T")[0],
-      };
-
-      setChats((prev) => [...prev, newChat]);
+      // Tunggu echo (receive_message) dari server untuk menampilkan pesan, 
+      // persis seperti yang dilakukan di frontend customer
       scrollToBottom();
     }
   };
