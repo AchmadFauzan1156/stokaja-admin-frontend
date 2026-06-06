@@ -89,6 +89,7 @@ export async function apiFetch(endpoint, options = {}) {
   let res = await fetch(`${API_URL}${endpoint}`, {
     ...options,
     headers,
+    cache: "no-store",
   });
 
   // Auto refresh token jika 401
@@ -99,6 +100,7 @@ export async function apiFetch(endpoint, options = {}) {
       res = await fetch(`${API_URL}${endpoint}`, {
         ...options,
         headers,
+        cache: "no-store",
       });
     }
   }

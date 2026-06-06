@@ -37,10 +37,10 @@ export default function StockPage() {
       setIsLoading(true);
       if (activeTab === "produk") {
         const res = await apiGet("/produk?limit=100");
-        setProducts(res.data || []);
+        setProducts(Array.isArray(res) ? res : res.data || []);
       } else {
         const res = await apiGet("/bahan-baku?limit=100");
-        setMaterials(res.data || []);
+        setMaterials(Array.isArray(res) ? res : res.data || []);
       }
     } catch (error) {
       showError(`Gagal memuat ${activeTab === "produk" ? "produk" : "bahan baku"}`);
@@ -127,11 +127,11 @@ export default function StockPage() {
       if (activeTab === "produk") {
         formData.append("nama", name);
         formData.append("kategoriId", categoryId);
-        formData.append("harga", price);
+        formData.append("harga", price || 0);
       } else {
         formData.append("namaBahan", name);
-        formData.append("hargaJual", price);
-        formData.append("hargaModal", hargaModal);
+        formData.append("hargaJual", price || 0);
+        formData.append("hargaModal", hargaModal || 0);
       }
       formData.append("stok", stock || 0);
       formData.append("satuan", satuan);

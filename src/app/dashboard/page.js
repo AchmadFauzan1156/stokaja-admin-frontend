@@ -35,7 +35,7 @@ export default function DashboardPage() {
       try {
         setIsLoading(true);
         // 1. Pesanan masuk
-        const resOrders = await apiGet("/transaksi?status=menunggu&limit=1");
+        const resOrders = await apiGet("/transaksi?status=pending&limit=1");
         
         // 2. Produk total & low stock
         const resProducts = await apiGet("/produk?limit=100");

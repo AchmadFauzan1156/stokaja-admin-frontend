@@ -56,7 +56,7 @@ export default function OrderDetailPage() {
     setIsUpdating(true);
     let nextStatus = "selesai";
 
-    if (order.statusPesanan === "menunggu") nextStatus = "diproses";
+    if (order.statusPesanan === "pending") nextStatus = "diproses";
     else if (order.statusPesanan === "diproses") nextStatus = "dikirim";
     else if (order.statusPesanan === "dikirim") nextStatus = "selesai";
 
@@ -87,7 +87,7 @@ export default function OrderDetailPage() {
 
   const getButtonText = () => {
     switch (order.statusPesanan) {
-      case "menunggu": return "Terima & Proses";
+      case "pending": return "Terima & Proses";
       case "diproses": return "Kirim Pesanan";
       case "dikirim": return "Selesaikan";
       default: return null;
@@ -95,7 +95,7 @@ export default function OrderDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F0E7D6] px-4 pt-14 pb-20">
+    <div className="min-h-screen bg-[#F0E7D6] px-4 pt-14 pb-32">
       <button onClick={() => router.back()} className="mb-6 text-[#6E822E] font-signika">
         ← Kembali
       </button>

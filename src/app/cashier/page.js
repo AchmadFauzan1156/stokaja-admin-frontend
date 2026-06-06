@@ -22,7 +22,7 @@ export default function CashierPage() {
   const fetchOrders = useCallback(async () => {
     try {
       setIsLoadingOrders(true);
-      // Fetch pesanan dengan status 'menunggu', 'diproses', 'dikirim' (yang belum selesai)
+      // Fetch pesanan dengan status 'pending', 'diproses', 'dikirim' (yang belum selesai)
       // Kasir di frontend ini hanya butuh list pesanan.
       // Kita fetch list transaksi limit 20
       const res = await apiGet("/transaksi?limit=20");
@@ -37,10 +37,27 @@ export default function CashierPage() {
 
   const fetchProducts = useCallback(async () => {
     try {
-      const res = await apiGet("/produk?limit=100");
-      setProducts(res.data || []);
+      const resProduk = await apiGet("/produk?limit=100");
+      const resBahan = await apiGet("/bahan-baku?limit=100");
+      
+      const produkList = Array.isArray(resProduk) ? resProduk : (resProduk.data || []);
+      const bahanList = Array.isArray(resBahan) ? resBahan : (resBahan.data || []);
+
+      const produkData = produkList.map(p => ({ 
+        ...p, 
+        tipeItem: 'Product' 
+      }));
+      
+      const bahanData = bahanList.map(b => ({ 
+        ...b, 
+        tipeItem: 'RawMaterial', 
+        nama: b.namaBahan, 
+        harga: b.hargaJual 
+      }));
+
+      setProducts([...produkData, ...bahanData]);
     } catch (error) {
-      console.error("Gagal memuat produk", error);
+      console.error("Gagal memuat produk dan bahan baku", error);
     }
   }, []);
 
@@ -54,7 +71,7 @@ export default function CashierPage() {
     if (existing) {
       setCart((prev) =>
         prev.map((item) =>
-          item._id === product._id ? { ...item, qty: item.qty + 1 } : item
+          item._id === product._id ? { ...item, qty: (Number(item.qty) || 0) + 1 } : item
         )
       );
       return;
@@ -62,7 +79,48 @@ export default function CashierPage() {
     setCart((prev) => [...prev, { ...product, qty: 1 }]);
   };
 
-  const total = cart.reduce((sum, item) => sum + (item.harga || 0) * item.qty, 0);
+  const removeProduct = (product) => {
+    const existing = cart.find((item) => item._id === product._id);
+    if (!existing) return;
+
+    const currentQty = Number(existing.qty) || 0;
+    if (currentQty <= 1) {
+      setCart((prev) => prev.filter((item) => item._id !== product._id));
+    } else {
+      setCart((prev) =>
+        prev.map((item) =>
+          item._id === product._id ? { ...item, qty: currentQty - 1 } : item
+        )
+      );
+    }
+  };
+
+  const updateProductQty = (product, newQty) => {
+    if (newQty === "") {
+      setCart((prev) =>
+        prev.map((item) =>
+          item._id === product._id ? { ...item, qty: "" } : item
+        )
+      );
+      return;
+    }
+    
+    const qty = parseInt(newQty, 10);
+    if (isNaN(qty) || qty < 0) return;
+    
+    if (qty === 0) {
+       setCart((prev) => prev.filter((item) => item._id !== product._id));
+       return;
+    }
+    
+    setCart((prev) =>
+      prev.map((item) =>
+        item._id === product._id ? { ...item, qty } : item
+      )
+    );
+  };
+
+  const total = cart.reduce((sum, item) => sum + (item.harga || 0) * (Number(item.qty) || 0), 0);
 
   const filteredProducts = products.filter((product) =>
     (product.nama || "").toLowerCase().includes(search.toLowerCase())
@@ -76,7 +134,8 @@ export default function CashierPage() {
       const payload = {
         isiKeranjang: cart.map(c => ({
           produkId: c._id,
-          jumlahBeli: c.qty
+          jumlahBeli: Number(c.qty) || 1,
+          tipeItem: c.tipeItem || 'Product'
         })),
         metodePembayaran: 'tunai',
         jumlahDibayar: total
@@ -119,7 +178,7 @@ export default function CashierPage() {
                       ${
                         order.statusPesanan === "selesai" ? "bg-green-100 text-green-700" :
                         order.statusPesanan === "batal" ? "bg-red-100 text-red-700" :
-                        order.statusPesanan === "menunggu" ? "bg-yellow-100 text-yellow-700" :
+                        order.statusPesanan === "pending" ? "bg-yellow-100 text-yellow-700" :
                         "bg-blue-100 text-blue-700"
                       }
                     `}>
@@ -159,20 +218,38 @@ export default function CashierPage() {
       {/* Products */}
       <div className="mt-4 px-4 max-h-[400px] overflow-y-auto">
         <div className="flex flex-col gap-3">
-          {filteredProducts.map((product) => (
-            <button
-              key={product._id}
-              onClick={() => addProduct(product)}
-              className="flex items-center justify-between rounded-[18px] border-2 border-[#D6D6D6] bg-[#F5F5F5] p-4 text-left"
-            >
-              <div>
-                <h3 className="font-squadaOne text-[22px] text-[#4B4B4B]">{product.nama}</h3>
-                <p className="text-[#FF5C2B] font-signika">Rp{(product.harga || 0).toLocaleString("id-ID")}</p>
-                <p className="text-xs text-[#888] font-signika">Sisa: {product.stok}</p>
+          {filteredProducts.map((product) => {
+            const cartItem = cart.find(c => c._id === product._id);
+            const inCart = !!cartItem;
+            const qty = cartItem ? cartItem.qty : 0;
+            return (
+              <div
+                key={product._id}
+                className="flex items-center justify-between rounded-[18px] border-2 border-[#D6D6D6] bg-[#F5F5F5] p-4 text-left"
+              >
+                <div>
+                  <h3 className="font-squadaOne text-[22px] text-[#4B4B4B]">{product.nama}</h3>
+                  <p className="text-[#FF5C2B] font-signika">Rp{(product.harga || 0).toLocaleString("id-ID")} <span className="text-sm text-[#888]">/ {product.satuan || "satuan"}</span></p>
+                  <p className="text-xs text-[#888] font-signika">Sisa stok: {product.stok}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  {inCart && (
+                    <>
+                      <button onClick={() => removeProduct(product)} className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#FF5C2B] text-white font-bold text-xl">-</button>
+                      <input 
+                        type="number"
+                        value={qty}
+                        onChange={(e) => updateProductQty(product, e.target.value)}
+                        className="w-16 bg-white border-2 border-[#D6D6D6] rounded-xl text-center font-squadaOne text-[22px] text-[#4B4B4B] outline-none"
+                        min="0"
+                      />
+                    </>
+                  )}
+                  <button onClick={() => addProduct(product)} className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#B6D04E] text-white font-bold text-xl">+</button>
+                </div>
               </div>
-              <div className="rounded-full bg-[#B6D04E] px-4 py-2 text-white font-bold">+</div>
-            </button>
-          ))}
+            );
+          })}
           {filteredProducts.length === 0 && (
             <p className="text-center font-signika text-[#888]">Produk tidak ditemukan</p>
           )}
@@ -187,9 +264,22 @@ export default function CashierPage() {
             <p className="text-center text-[#888] font-signika">Belum ada produk</p>
           ) : (
             cart.map((item) => (
-              <div key={item._id} className="mb-3 flex justify-between font-signika">
-                <span>{item.nama} x{item.qty}</span>
-                <span>Rp{((item.harga || 0) * item.qty).toLocaleString("id-ID")}</span>
+              <div key={item._id} className="mb-3 flex justify-between items-center font-signika">
+                <div className="flex items-center gap-3 flex-1">
+                  <div className="flex items-center gap-2 bg-white rounded-full border border-[#D6D6D6] p-1 shrink-0">
+                    <button onClick={() => removeProduct(item)} className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#FF5C2B] text-white font-bold">-</button>
+                    <input 
+                      type="number"
+                      value={item.qty}
+                      onChange={(e) => updateProductQty(item, e.target.value)}
+                      className="w-12 bg-transparent text-center font-squadaOne text-lg text-[#4B4B4B] outline-none"
+                      min="0"
+                    />
+                    <button onClick={() => addProduct(item)} className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#B6D04E] text-white font-bold">+</button>
+                  </div>
+                  <span className="font-semibold text-[#4B4B4B] flex-1 truncate">{item.nama}</span>
+                </div>
+                <span className="font-bold text-[#FF5C2B] ml-2">Rp{((item.harga || 0) * (Number(item.qty) || 0)).toLocaleString("id-ID")}</span>
               </div>
             ))
           )}
