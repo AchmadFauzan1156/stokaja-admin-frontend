@@ -116,6 +116,11 @@ export default function StockPage() {
       return;
     }
 
+    if (price < 0 || stock < 0 || (activeTab !== "produk" && hargaModal < 0)) {
+      showError("Harga dan Stok tidak boleh bernilai negatif");
+      return;
+    }
+
     if (activeTab === "produk" && !categoryId) {
       showError("Kategori produk wajib dipilih");
       return;

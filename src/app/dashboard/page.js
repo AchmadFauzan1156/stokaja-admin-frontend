@@ -40,7 +40,7 @@ export default function DashboardPage() {
         // 2. Produk total & low stock
         const resProducts = await apiGet("/produk?limit=100");
         const allProducts = resProducts.data || [];
-        const low = allProducts.filter(p => p.stok > 0 && p.stok <= (p.stokMinimum || 5));
+        const low = allProducts.filter(p => p.stok <= (p.stokMinimum || 5));
         
         // 3. Omzet dari Laporan
         const resLaporan = await apiGet("/laporan");
@@ -358,21 +358,16 @@ export default function DashboardPage() {
                 </div>
 
                 <div
-                  className="
+                  className={`
                     rounded-full
-
-                    bg-red-100
-
                     px-3
                     py-1
-
                     font-signika
                     font-semibold
-
-                    text-red-600
-                  "
+                    ${item.stok === 0 ? "bg-red-200 text-red-800" : "bg-orange-100 text-orange-600"}
+                  `}
                 >
-                  Rendah
+                  {item.stok === 0 ? "Habis!" : "Rendah"}
                 </div>
 
               </button>
