@@ -140,11 +140,35 @@ export default function OrderDetailPage() {
           <button 
             onClick={cancelOrder}
             disabled={isUpdating}
-            className="text-red-500 font-signika mt-2"
+            className="text-red-500 font-signika mt-2 mb-2"
           >
             Batalkan Pesanan
           </button>
         )}
+
+        <button 
+          onClick={async () => {
+            try {
+              const token = localStorage.getItem("accessToken");
+              const url = `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1"}/transaksi/${id}/pdf`;
+              const res = await fetch(url, { headers: { 'Authorization': `Bearer ${token}` } });
+              if (!res.ok) throw new Error("Gagal export PDF");
+              const blob = await res.blob();
+              const downloadUrl = window.URL.createObjectURL(blob);
+              const link = document.createElement('a');
+              link.href = downloadUrl;
+              link.download = `Struk_${order.nomorResi}.pdf`;
+              document.body.appendChild(link);
+              link.click();
+              link.remove();
+            } catch (error) {
+              showError("Gagal mengunduh PDF struk");
+            }
+          }}
+          className="rounded-[20px] bg-[#6E822E] px-8 py-3 font-signika font-semibold text-white mt-4 w-full max-w-xs"
+        >
+          Cetak Struk PDF
+        </button>
       </div>
     </div>
   );

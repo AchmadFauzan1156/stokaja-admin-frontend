@@ -100,7 +100,49 @@ export default function ReportsPage() {
   };
 
   const exportPDF = () => {
-    alert("Export PDF belum tersedia (perlu endpoint backend khusus laporan PDF)");
+    import("jspdf").then(({ default: jsPDF }) => {
+      import("jspdf-autotable").then(() => {
+        const doc = new jsPDF();
+        
+        doc.setFontSize(20);
+        doc.text("Laporan Penjualan StokAja", 14, 22);
+        
+        doc.setFontSize(11);
+        doc.text(`Periode: ${filter.charAt(0).toUpperCase() + filter.slice(1)}`, 14, 30);
+        doc.text(`Tanggal Cetak: ${new Date().toLocaleString("id-ID")}`, 14, 36);
+
+        const tableColumn = ["No", "Tanggal", "Resi", "Status", "Pajak (Rp)", "Total Harga (Rp)", "Untung Bersih (Rp)"];
+        const tableRows = [];
+
+        reportData.forEach((row, index) => {
+          const rowData = [
+            index + 1,
+            new Date(row.createdAt).toLocaleDateString("id-ID"),
+            row.nomorResi,
+            row.statusPesanan.toUpperCase(),
+            (row.pajak || 0).toLocaleString("id-ID"),
+            (row.totalHarga || 0).toLocaleString("id-ID"),
+            (row.marginKeuntungan || 0).toLocaleString("id-ID"),
+          ];
+          tableRows.push(rowData);
+        });
+
+        doc.autoTable({
+          startY: 45,
+          head: [tableColumn],
+          body: tableRows,
+          theme: 'grid',
+          headStyles: { fillColor: [110, 130, 46] }
+        });
+
+        const finalY = doc.lastAutoTable.finalY || 45;
+        doc.setFontSize(12);
+        doc.text(`Total Omzet: Rp ${totalRevenue.toLocaleString("id-ID")}`, 14, finalY + 10);
+        doc.text(`Total Profit: Rp ${totalProfit.toLocaleString("id-ID")}`, 14, finalY + 18);
+
+        doc.save(`Laporan_StokAja_${Date.now()}.pdf`);
+      });
+    });
   };
 
   return (
