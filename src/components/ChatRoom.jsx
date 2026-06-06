@@ -24,8 +24,8 @@ export default function ChatRoom({ userId }) {
         setIsLoading(true);
         // Fetch contacts to get name
         apiGet("/chat/contacts").then(res => {
-          const contact = (res.data || []).find(c => c._id === userId);
-          if (contact) setContactName(contact.nama || contact.email || "Pelanggan");
+          const contact = (res.data || []).find(c => c.pelanggan?._id === userId);
+          if (contact) setContactName(contact.pelanggan?.namaLengkap || contact.pelanggan?.email || "Pelanggan");
         }).catch(err => console.error("Gagal load kontak", err));
 
         const res = await apiGet(`/chat/history?pelangganId=${userId}`);
@@ -84,10 +84,11 @@ export default function ChatRoom({ userId }) {
           setChats((prev) => [...prev, newChat]);
           scrollToBottom();
 
-          // Mark this new message as read if it's from customer
-          if (data.pengirim === userId && data._id) {
-            apiPatch(`/chat/${data._id}/read`);
-          }
+          // Hapus pemanggilan API per pesan ini karena spam API call,
+          // kita bisa menggunakan debounced read-all atau handle di backend
+          // if (data.pengirim === userId && data._id) {
+          //   apiPatch(`/chat/${data._id}/read`);
+          // }
         }
       };
 

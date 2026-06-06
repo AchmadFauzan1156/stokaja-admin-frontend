@@ -17,6 +17,7 @@ export default function CashierPage() {
   
   const [search, setSearch] = useState("");
   const [cart, setCart] = useState([]);
+  const [paymentMethod, setPaymentMethod] = useState("tunai");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const fetchOrders = useCallback(async () => {
@@ -67,8 +68,16 @@ export default function CashierPage() {
   }, [fetchOrders, fetchProducts]);
 
   const addProduct = (product) => {
+    if (product.stok <= 0) {
+      showError("Stok produk habis!");
+      return;
+    }
     const existing = cart.find((item) => item._id === product._id);
     if (existing) {
+      if ((Number(existing.qty) || 0) + 1 > product.stok) {
+        showError("Melebihi sisa stok!");
+        return;
+      }
       setCart((prev) =>
         prev.map((item) =>
           item._id === product._id ? { ...item, qty: (Number(item.qty) || 0) + 1 } : item
@@ -113,6 +122,11 @@ export default function CashierPage() {
        return;
     }
     
+    if (qty > product.stok) {
+      showError("Melebihi sisa stok!");
+      return;
+    }
+    
     setCart((prev) =>
       prev.map((item) =>
         item._id === product._id ? { ...item, qty } : item
@@ -137,7 +151,7 @@ export default function CashierPage() {
           jumlahBeli: Number(c.qty) || 1,
           tipeItem: c.tipeItem || 'Product'
         })),
-        metodePembayaran: 'tunai',
+        metodePembayaran: paymentMethod,
         jumlahDibayar: total
       };
 
@@ -287,6 +301,32 @@ export default function CashierPage() {
             <div className="flex justify-between">
               <h3 className="font-squadaOne text-[28px] text-[#FF5C2B]">Total</h3>
               <h3 className="font-squadaOne text-[28px] text-[#FF5C2B]">Rp{total.toLocaleString("id-ID")}</h3>
+            </div>
+          </div>
+          
+          <div className="mt-4 border-t-2 border-[#DDD] pt-4">
+            <h3 className="font-squadaOne text-[20px] text-[#4B4B4B] mb-2">Metode Pembayaran</h3>
+            <div className="flex gap-4">
+              <label className="flex items-center gap-2 font-signika">
+                <input 
+                  type="radio" 
+                  name="paymentMethod" 
+                  value="tunai" 
+                  checked={paymentMethod === "tunai"} 
+                  onChange={() => setPaymentMethod("tunai")} 
+                />
+                Tunai
+              </label>
+              <label className="flex items-center gap-2 font-signika">
+                <input 
+                  type="radio" 
+                  name="paymentMethod" 
+                  value="qris" 
+                  checked={paymentMethod === "qris"} 
+                  onChange={() => setPaymentMethod("qris")} 
+                />
+                QRIS
+              </label>
             </div>
           </div>
         </div>
