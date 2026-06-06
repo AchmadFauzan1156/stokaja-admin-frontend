@@ -74,10 +74,26 @@ export default function ReportsPage() {
   const exportExcel = async () => {
     try {
       const token = localStorage.getItem("accessToken");
-      const url = `${API_URL}/transaksi/laporan/excel`;
       
-      // Download directly via window.open
-      // Wait, we need auth header. So fetch as blob.
+      let query = "";
+      if (filter !== "semua") {
+        const today = new Date();
+        let startDate = new Date();
+        
+        if (filter === "daily") {
+          startDate.setDate(today.getDate() - 1);
+        } else if (filter === "weekly") {
+          startDate.setDate(today.getDate() - 7);
+        } else if (filter === "monthly") {
+          startDate.setMonth(today.getMonth() - 1);
+        }
+        
+        query = `?startDate=${startDate.toISOString().split('T')[0]}&endDate=${today.toISOString().split('T')[0]}`;
+      }
+
+      const url = `${API_URL}/transaksi/laporan/excel${query}`;
+      
+      // Fetch as blob
       const res = await fetch(url, {
         headers: {
           'Authorization': `Bearer ${token}`
