@@ -16,7 +16,7 @@ const squadaOne =
     weight: "400",
 
     variable:
-      "--font-squadaOne",
+      "--font-squada-next",
   });
 
 const signika =
@@ -31,7 +31,7 @@ const signika =
     ],
 
     variable:
-      "--font-signika",
+      "--font-signika-next",
   });
 
 export const metadata = {
