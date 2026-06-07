@@ -18,6 +18,10 @@ export default function ChatRoom({ userId }) {
   const [isLoading, setIsLoading] = useState(true);
   const chatEndRef = useRef(null);
 
+  const scrollToBottom = () => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   useEffect(() => {
     const fetchHistory = async () => {
       try {
@@ -99,10 +103,6 @@ export default function ChatRoom({ userId }) {
       };
     }
   }, [userId, user]);
-
-  const scrollToBottom = () => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
 
   const handleSend = (message) => {
     const socket = getSocket();
