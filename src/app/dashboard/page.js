@@ -37,10 +37,8 @@ export default function DashboardPage() {
         // 1. Pesanan masuk
         const resOrders = await apiGet("/transaksi?status=pending&limit=1");
         
-        // 2. Produk total & low stock
-        const resProducts = await apiGet("/produk?limit=100");
-        const allProducts = resProducts.data || [];
-        const low = allProducts.filter(p => p.stok <= (p.stokMinimum || 5));
+        // 2. Dashboard Stats (untuk low stock produk & bahan baku)
+        const resStats = await apiGet("/dashboard/stats");
         
         // 3. Omzet dari Laporan
         const resLaporan = await apiGet("/laporan");
@@ -53,10 +51,22 @@ export default function DashboardPage() {
 
         setStats({
           incomingOrders: resOrders.total || 0,
-          totalProducts: resProducts.total || 0,
+          totalProducts: resStats.data?.totalProduk || 0,
           revenue: resLaporan.totalPendapatan || 0,
-          unreadMessages: 0, // Belum ada API untuk chat unread
+          unreadMessages: 0,
         });
+
+        const low = [
+          ...(resStats.data?.produkStokMenipis || []).map(p => ({...p, isBahanBaku: false})),
+          ...(resStats.data?.bahanBakuStokMenipis || []).map(b => ({
+             _id: b._id,
+             nama: b.namaBahan,
+             stok: b.stok,
+             stokMinimum: b.stokMinimum,
+             satuan: b.satuan,
+             isBahanBaku: true
+          }))
+        ];
 
         setLowStocks(low);
         setLatestTransactions(resLatest.data || []);
