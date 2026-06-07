@@ -52,6 +52,7 @@ export function AuthProvider({ children }) {
         clearTokens();
         setUser(null);
       }
+    } finally {
       setIsLoading(false);
     }
   }, []);
