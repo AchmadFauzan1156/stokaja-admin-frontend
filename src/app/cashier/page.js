@@ -183,12 +183,12 @@ export default function CashierPage() {
     <div className="min-h-screen bg-[#F0E7D6] pb-44">
       {/* Header */}
       <div className="px-4 pt-14">
-        <h1 className="font-squadaOne text-[40px] text-[#6E822E]">Cashier</h1>
+        <h1 className="font-squada text-[40px] text-[#6E822E]">Cashier</h1>
       </div>
 
       {/* Incoming Orders */}
       <div className="mt-6 px-4">
-        <h2 className="mb-3 font-squadaOne text-[30px] text-[#6E822E]">Daftar Pesanan</h2>
+        <h2 className="mb-3 font-squada text-[30px] text-[#6E822E]">Daftar Pesanan</h2>
         
         {isLoadingOrders ? (
           <div className="flex justify-center my-4"><LoadingSpinner /></div>
@@ -200,7 +200,7 @@ export default function CashierPage() {
               <Link key={order._id} href={`/cashier/${order._id}`}>
                 <div className="mb-4 rounded-[20px] border-2 border-[#D6D6D6] bg-white p-4 transition-all duration-200 hover:scale-[1.01]">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-squadaOne text-[24px] text-[#6E822E]">{order.nomorResi}</h3>
+                    <h3 className="font-squada text-[24px] text-[#6E822E]">{order.nomorResi}</h3>
                     <span className={`rounded-full px-3 py-1 text-xs font-semibold
                       ${
                         order.statusPesanan === "selesai" ? "bg-green-100 text-green-700" :
@@ -219,7 +219,7 @@ export default function CashierPage() {
                     <span className="font-signika text-sm text-[#888]">
                       {order.keranjang?.length || 0} item
                     </span>
-                    <span className="font-squadaOne text-[22px] text-[#FF5C2B]">
+                    <span className="font-squada text-[22px] text-[#FF5C2B]">
                       Rp{(order.totalHarga || 0).toLocaleString("id-ID")}
                     </span>
                   </div>
@@ -232,7 +232,7 @@ export default function CashierPage() {
 
       {/* Search Product */}
       <div className="mt-8 px-4">
-        <h2 className="mb-3 font-squadaOne text-[30px] text-[#6E822E]">Kasir Manual</h2>
+        <h2 className="mb-3 font-squada text-[30px] text-[#6E822E]">Kasir Manual</h2>
         <input
           type="text"
           placeholder="Cari produk..."
@@ -255,7 +255,7 @@ export default function CashierPage() {
                 className="flex items-center justify-between rounded-[18px] border-2 border-[#D6D6D6] bg-[#F5F5F5] p-4 text-left"
               >
                 <div>
-                  <h3 className="font-squadaOne text-[22px] text-[#4B4B4B]">{product.nama}</h3>
+                  <h3 className="font-squada text-[22px] text-[#4B4B4B]">{product.nama}</h3>
                   <p className="text-[#FF5C2B] font-signika">Rp{(product.harga || 0).toLocaleString("id-ID")} <span className="text-sm text-[#888]">/ {product.satuan || "satuan"}</span></p>
                   <p className="text-xs text-[#888] font-signika">Sisa stok: {product.stok}</p>
                 </div>
@@ -267,7 +267,7 @@ export default function CashierPage() {
                         type="number"
                         value={qty}
                         onChange={(e) => updateProductQty(product, e.target.value)}
-                        className="w-16 bg-white border-2 border-[#D6D6D6] rounded-xl text-center font-squadaOne text-[22px] text-[#4B4B4B] outline-none"
+                        className="w-16 bg-white border-2 border-[#D6D6D6] rounded-xl text-center font-squada text-[22px] text-[#4B4B4B] outline-none"
                         min="0"
                       />
                     </>
@@ -285,7 +285,7 @@ export default function CashierPage() {
 
       {/* Cart */}
       <div className="mt-8 px-4">
-        <h2 className="mb-3 font-squadaOne text-[30px] text-[#6E822E]">Keranjang</h2>
+        <h2 className="mb-3 font-squada text-[30px] text-[#6E822E]">Keranjang</h2>
         <div className="rounded-3xl border-2 border-[#D6D6D6] bg-[#F5F5F5] p-4">
           {cart.length === 0 ? (
             <p className="text-center text-[#888] font-signika">Belum ada produk</p>
@@ -299,7 +299,7 @@ export default function CashierPage() {
                       type="number"
                       value={item.qty}
                       onChange={(e) => updateProductQty(item, e.target.value)}
-                      className="w-12 bg-transparent text-center font-squadaOne text-lg text-[#4B4B4B] outline-none"
+                      className="w-12 bg-transparent text-center font-squada text-lg text-[#4B4B4B] outline-none"
                       min="0"
                     />
                     <button onClick={() => addProduct(item)} className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#B6D04E] text-white font-bold">+</button>
@@ -312,13 +312,13 @@ export default function CashierPage() {
           )}
           <div className="mt-4 border-t-2 border-[#DDD] pt-4">
             <div className="flex justify-between">
-              <h3 className="font-squadaOne text-[28px] text-[#FF5C2B]">Total</h3>
-              <h3 className="font-squadaOne text-[28px] text-[#FF5C2B]">Rp{total.toLocaleString("id-ID")}</h3>
+              <h3 className="font-squada text-[28px] text-[#FF5C2B]">Total</h3>
+              <h3 className="font-squada text-[28px] text-[#FF5C2B]">Rp{total.toLocaleString("id-ID")}</h3>
             </div>
           </div>
           
           <div className="mt-4 border-t-2 border-[#DDD] pt-4">
-            <h3 className="font-squadaOne text-[20px] text-[#4B4B4B] mb-2">Metode Pembayaran</h3>
+            <h3 className="font-squada text-[20px] text-[#4B4B4B] mb-2">Metode Pembayaran</h3>
             <div className="flex gap-4">
               <label className="flex items-center gap-2 font-signika">
                 <input 

@@ -117,7 +117,7 @@ export default function DashboardPage() {
 
         <h1
           className="
-            font-squadaOne
+            font-squada
             text-[40px]
 
             text-[#6E822E]
@@ -166,7 +166,7 @@ export default function DashboardPage() {
       {/* Manajemen Data */}
       {user?.role === "admin" && (
         <div className="mt-8 px-4">
-          <h2 className="mb-3 font-squadaOne text-[30px] text-[#6E822E]">
+          <h2 className="mb-3 font-squada text-[30px] text-[#6E822E]">
             Manajemen Data
           </h2>
           <div className="grid grid-cols-3 gap-3">
@@ -204,7 +204,7 @@ export default function DashboardPage() {
           className="
             mb-3
 
-            font-squadaOne
+            font-squada
             text-[30px]
 
             text-[#6E822E]
@@ -277,7 +277,7 @@ export default function DashboardPage() {
 
           <h2
             className="
-              font-squadaOne
+              font-squada
               text-[30px]
 
               text-[#6E822E]
@@ -345,7 +345,7 @@ export default function DashboardPage() {
 
                   <h3
                     className="
-                      font-squadaOne
+                      font-squada
                       text-[24px]
 
                       text-[#4B4B4B]
@@ -405,7 +405,7 @@ export default function DashboardPage() {
 
           <h2
             className="
-              font-squadaOne
+              font-squada
               text-[30px]
 
               text-[#6E822E]
@@ -469,7 +469,7 @@ export default function DashboardPage() {
 
                 <h3
                   className="
-                    font-squadaOne
+                    font-squada
                     text-[24px]
 
                     text-[#4B4B4B]
@@ -546,7 +546,7 @@ function StatCard({
         className="
           mt-2
 
-          font-squadaOne
+          font-squada
           text-[32px]
 
           text-[#6E822E]

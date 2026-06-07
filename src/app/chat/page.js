@@ -49,7 +49,7 @@ export default function ChatPage() {
   return (
     <div className="min-h-screen bg-[#F0E7D6] pb-40">
       <div className="px-4 pt-14">
-        <h1 className="font-squadaOne text-[40px] text-[#6E822E]">Chat</h1>
+        <h1 className="font-squada text-[40px] text-[#6E822E]">Chat</h1>
       </div>
 
       <div className="mt-4 flex justify-center px-4">

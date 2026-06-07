@@ -185,7 +185,7 @@ export default function StockPage() {
       {/* Header */}
       <div className="px-4 pt-14">
         <div className="flex items-center justify-between">
-          <h1 className="font-squadaOne text-[40px] text-[#6E822E]">Stock</h1>
+          <h1 className="font-squada text-[40px] text-[#6E822E]">Stock</h1>
           <button
             onClick={openAddModal}
             className="rounded-xl bg-[#6E822E] px-4 py-2 font-signika font-semibold text-white"
@@ -238,7 +238,7 @@ export default function StockPage() {
                           className="mb-3 h-32 w-full rounded-xl object-cover"
                         />
                       )}
-                      <h2 className="font-squadaOne text-[26px] text-[#4B4B4B]">{itemName}</h2>
+                      <h2 className="font-squada text-[26px] text-[#4B4B4B]">{itemName}</h2>
                       {activeTab === "produk" && item.kategori && (
                         <div className={`mt-2 inline-flex rounded-full px-3 py-1 font-signika text-sm font-medium ${getCategoryStyle(item.kategori.nama)}`}>
                           {item.kategori.nama}
@@ -282,7 +282,7 @@ export default function StockPage() {
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
           <div className="w-[90%] max-w-md rounded-3xl bg-white p-6 max-h-[90vh] overflow-y-auto">
-            <h2 className="mb-4 font-squadaOne text-[30px] text-[#6E822E]">
+            <h2 className="mb-4 font-squada text-[30px] text-[#6E822E]">
               {editingId ? "Edit" : "Tambah"} {activeTab === "produk" ? "Produk" : "Bahan Baku"}
             </h2>
             <div className="flex flex-col gap-3">

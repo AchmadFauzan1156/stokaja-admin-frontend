@@ -100,10 +100,10 @@ export default function OrderDetailPage() {
         ← Kembali
       </button>
 
-      <h1 className="font-squadaOne text-[40px] text-[#6E822E]">Detail Pesanan</h1>
+      <h1 className="font-squada text-[40px] text-[#6E822E]">Detail Pesanan</h1>
 
       <div className="mt-6 rounded-3xl border-2 border-[#D6D6D6] bg-white p-5">
-        <h2 className="font-squadaOne text-[28px]">{order.nomorResi}</h2>
+        <h2 className="font-squada text-[28px]">{order.nomorResi}</h2>
         <p className="mt-2 text-[#666] font-signika">
           {order.pelangganId ? "Pelanggan Terdaftar" : "Pelanggan Offline"}
         </p>
@@ -117,7 +117,7 @@ export default function OrderDetailPage() {
         </div>
 
         <div className="mt-5 border-t border-[#EEE] pt-4">
-          <h3 className="font-squadaOne text-[20px] text-[#6E822E] mb-2">Item Belanja:</h3>
+          <h3 className="font-squada text-[20px] text-[#6E822E] mb-2">Item Belanja:</h3>
           {order.keranjang?.map((item, idx) => (
             <div key={idx} className="flex justify-between mb-2 font-signika text-sm">
               <span>{item.produkId?.nama || item.produkId?.namaBahan || "Item Terhapus"} x{item.jumlahBeli}</span>

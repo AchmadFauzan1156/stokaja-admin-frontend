@@ -96,7 +96,7 @@ export default function UsersPage() {
             <button onClick={() => router.push("/dashboard")} className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#6E822E] shadow">
               <span className="text-xl font-bold">{"<"}</span>
             </button>
-            <h1 className="font-squadaOne text-[36px] text-[#6E822E]">Pengguna</h1>
+            <h1 className="font-squada text-[36px] text-[#6E822E]">Pengguna</h1>
           </div>
           <button
             onClick={openAddModal}
@@ -118,7 +118,7 @@ export default function UsersPage() {
             {users.map((u) => (
               <div key={u._id} className="flex flex-col rounded-[20px] border-2 border-[#D6D6D6] bg-[#F5F5F5] p-4">
                 <div className="flex items-center justify-between">
-                  <h2 className="font-squadaOne text-[24px] text-[#4B4B4B]">{u.namaLengkap}</h2>
+                  <h2 className="font-squada text-[24px] text-[#4B4B4B]">{u.namaLengkap}</h2>
                   <span className={`rounded-full px-3 py-1 font-signika text-sm font-semibold 
                     ${u.role === 'admin' ? 'bg-red-100 text-red-700' : 
                       u.role === 'kasir' ? 'bg-blue-100 text-blue-700' : 'bg-gray-200 text-gray-700'}`}>
@@ -151,7 +151,7 @@ export default function UsersPage() {
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
           <div className="w-full max-w-md rounded-3xl bg-white p-6">
-            <h2 className="mb-4 font-squadaOne text-[28px] text-[#6E822E]">Tambah Pengguna</h2>
+            <h2 className="mb-4 font-squada text-[28px] text-[#6E822E]">Tambah Pengguna</h2>
             
             <div className="flex flex-col gap-4">
               <input

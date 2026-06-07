@@ -25,7 +25,7 @@ export default function Button({
 
         p-[11.8px]
 
-        font-squadaOne
+        font-squada
         text-[32.246px]
 
         transition-all

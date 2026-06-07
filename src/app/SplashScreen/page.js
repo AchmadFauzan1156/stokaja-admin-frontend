@@ -51,7 +51,7 @@ export default function SplashScreen() {
 
       <h1
         className="
-          font-squadaOne
+          font-squada
           text-[75.097px]
           leading-none
           font-normal

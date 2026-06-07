@@ -164,7 +164,7 @@ export default function ReportsPage() {
   return (
     <div className="min-h-screen bg-[#F0E7D6] pb-44">
       <div className="px-4 pt-14">
-        <h1 className="font-squadaOne text-[40px] text-[#6E822E]">Reports</h1>
+        <h1 className="font-squada text-[40px] text-[#6E822E]">Reports</h1>
       </div>
 
       {isLoading ? (
@@ -178,7 +178,7 @@ export default function ReportsPage() {
 
           <div className="mt-8 px-4">
             <div className="rounded-3xl border-2 border-[#D6D6D6] bg-[#F5F5F5] p-5">
-              <h2 className="mb-4 font-squadaOne text-[28px] text-[#6E822E]">Statistik Penjualan</h2>
+              <h2 className="mb-4 font-squada text-[28px] text-[#6E822E]">Statistik Penjualan</h2>
               {chartData.length > 0 ? (
                 <div className="h-64 w-full">
                   <ResponsiveContainer width="100%" height="100%">
@@ -200,7 +200,7 @@ export default function ReportsPage() {
           </div>
 
           <div className="mt-8 px-4">
-            <h2 className="mb-3 font-squadaOne text-[28px] text-[#6E822E]">Filter Laporan</h2>
+            <h2 className="mb-3 font-squada text-[28px] text-[#6E822E]">Filter Laporan</h2>
             <div className="flex gap-2 flex-wrap">
               <FilterButton label="Semua" active={filter === "semua"} onClick={() => setFilter("semua")} />
               <FilterButton label="Harian" active={filter === "daily"} onClick={() => setFilter("daily")} />
@@ -210,7 +210,7 @@ export default function ReportsPage() {
           </div>
 
           <div className="mt-8 px-4">
-            <h2 className="mb-3 font-squadaOne text-[28px] text-[#6E822E]">Data Penjualan</h2>
+            <h2 className="mb-3 font-squada text-[28px] text-[#6E822E]">Data Penjualan</h2>
             <div className="overflow-x-auto rounded-3xl border-2 border-[#D6D6D6] bg-[#F5F5F5]">
               <table className="w-full min-w-[500px]">
                 <thead>
@@ -272,7 +272,7 @@ function SummaryCard({ title, value }) {
   return (
     <div className="rounded-[20px] border-2 border-[#D6D6D6] bg-[#F5F5F5] p-4">
       <p className="font-signika text-[16px] text-[#666]">{title}</p>
-      <h3 className="mt-2 font-squadaOne text-[32px] text-[#6E822E] break-words">{value}</h3>
+      <h3 className="mt-2 font-squada text-[32px] text-[#6E822E] break-words">{value}</h3>
     </div>
   );
 }

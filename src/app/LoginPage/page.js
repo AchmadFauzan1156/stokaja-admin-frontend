@@ -76,7 +76,7 @@ export default function LoginPage() {
 
             <h2
               className="
-                font-squadaOne
+                font-squada
                 text-[28px]
 
                 text-[#FF5C2B]

@@ -103,7 +103,7 @@ export default function CategoriesPage() {
             <button onClick={() => router.push("/dashboard")} className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#6E822E] shadow">
               <span className="text-xl font-bold">{"<"}</span>
             </button>
-            <h1 className="font-squadaOne text-[36px] text-[#6E822E]">Kategori</h1>
+            <h1 className="font-squada text-[36px] text-[#6E822E]">Kategori</h1>
           </div>
           <button
             onClick={openAddModal}
@@ -125,7 +125,7 @@ export default function CategoriesPage() {
             {categories.map((cat) => (
               <div key={cat._id} className="flex flex-col rounded-[20px] border-2 border-[#D6D6D6] bg-[#F5F5F5] p-4">
                 <div className="flex items-center justify-between">
-                  <h2 className="font-squadaOne text-[24px] text-[#4B4B4B]">{cat.nama}</h2>
+                  <h2 className="font-squada text-[24px] text-[#4B4B4B]">{cat.nama}</h2>
                   <span className={`rounded-full px-3 py-1 font-signika text-sm font-semibold ${cat.aktif ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
                     {cat.aktif ? "Aktif" : "Nonaktif"}
                   </span>
@@ -146,7 +146,7 @@ export default function CategoriesPage() {
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
           <div className="w-full max-w-md rounded-3xl bg-white p-6">
-            <h2 className="mb-4 font-squadaOne text-[28px] text-[#6E822E]">{editingId ? "Edit" : "Tambah"} Kategori</h2>
+            <h2 className="mb-4 font-squada text-[28px] text-[#6E822E]">{editingId ? "Edit" : "Tambah"} Kategori</h2>
             
             <div className="flex flex-col gap-4">
               <div>
