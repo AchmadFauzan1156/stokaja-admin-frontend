@@ -38,8 +38,8 @@ export default function CashierPage() {
 
   const fetchProducts = useCallback(async () => {
     try {
-      const resProduk = await apiGet("/produk?limit=100");
-      const resBahan = await apiGet("/bahan-baku?limit=100");
+      const resProduk = await apiGet("/produk?limit=500");
+      const resBahan = await apiGet("/bahan-baku?limit=500");
       
       const produkList = Array.isArray(resProduk) ? resProduk : (resProduk.data || []);
       const bahanList = Array.isArray(resBahan) ? resBahan : (resBahan.data || []);

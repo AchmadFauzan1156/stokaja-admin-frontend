@@ -91,7 +91,7 @@ export default function ReportsPage() {
         query = `?startDate=${startDate.toISOString().split('T')[0]}&endDate=${today.toISOString().split('T')[0]}`;
       }
 
-      const url = `${API_URL}/transaksi/laporan/excel${query}`;
+      const url = `${API_URL}/laporan/excel${query}`;
       
       // Fetch as blob
       const res = await fetch(url, {

@@ -10,7 +10,7 @@ let socket = null;
  * Token akan dikirim saat handshake untuk autentikasi
  */
 export function getSocket() {
-  if (socket && socket.connected) return socket;
+  if (socket) return socket;
 
   const token = getAccessToken();
   if (!token) return null;

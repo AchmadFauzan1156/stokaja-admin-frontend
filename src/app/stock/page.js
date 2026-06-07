@@ -36,10 +36,10 @@ export default function StockPage() {
     try {
       setIsLoading(true);
       if (activeTab === "produk") {
-        const res = await apiGet("/produk?limit=100");
+        const res = await apiGet("/produk?limit=500");
         setProducts(Array.isArray(res) ? res : res.data || []);
       } else {
-        const res = await apiGet("/bahan-baku?limit=100");
+        const res = await apiGet("/bahan-baku?limit=500");
         setMaterials(Array.isArray(res) ? res : res.data || []);
       }
     } catch (error) {

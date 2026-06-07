@@ -129,7 +129,13 @@ export async function apiFetch(endpoint, options = {}) {
     return { ok: true, blob: await res.blob() };
   }
 
-  const data = await res.json();
+  let data;
+  const rawText = await res.text();
+  try {
+    data = JSON.parse(rawText);
+  } catch (err) {
+    data = { pesan: `Server Error: ${res.statusText}`, detail: rawText };
+  }
 
   if (!res.ok) {
     const errorMsg =

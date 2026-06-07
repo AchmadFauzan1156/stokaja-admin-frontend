@@ -68,12 +68,16 @@ export function AuthProvider({ children }) {
     if (!isLoading) {
       const publicRoutes = ["/", "/LoginPage", "/SplashScreen"];
       const isPublicRoute = publicRoutes.includes(pathname);
+      const adminOnlyRoutes = ["/users", "/categories", "/reports"];
 
       if (!user && !isPublicRoute) {
         // Jika belum login tapi akses halaman private, tendang ke login
         router.replace("/LoginPage");
       } else if (user && (pathname === "/LoginPage" || pathname === "/")) {
         // Jika sudah login tapi akses halaman login, arahkan ke dashboard
+        router.replace("/dashboard");
+      } else if (user && user.role === "kasir" && adminOnlyRoutes.includes(pathname)) {
+        // Kasir dilarang mengakses manajemen user, kategori, dan laporan
         router.replace("/dashboard");
       }
     }
