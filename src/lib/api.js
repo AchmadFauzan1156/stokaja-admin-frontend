@@ -33,6 +33,8 @@ function clearTokens() {
   localStorage.removeItem("user");
 }
 
+let refreshTokenPromise = null;
+
 /**
  * Coba refresh access token menggunakan refresh token
  */
@@ -40,30 +42,40 @@ async function tryRefreshToken() {
   const refreshToken = getRefreshToken();
   if (!refreshToken) return null;
 
-  try {
-    const res = await fetch(`${API_URL}/refresh-token`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ refreshToken }),
-    });
+  if (refreshTokenPromise) {
+    return refreshTokenPromise;
+  }
 
-    if (!res.ok) {
+  refreshTokenPromise = (async () => {
+    try {
+      const res = await fetch(`${API_URL}/refresh-token`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ refreshToken }),
+      });
+
+      if (!res.ok) {
+        clearTokens();
+        return null;
+      }
+
+      const data = await res.json();
+      if (data.success && data.data) {
+        setTokens(data.data.accessToken, data.data.refreshToken);
+        return data.data.accessToken;
+      }
+
       clearTokens();
       return null;
+    } catch {
+      // Jangan clearTokens jika terjadi network error (internet putus sesaat)
+      return null;
+    } finally {
+      refreshTokenPromise = null;
     }
+  })();
 
-    const data = await res.json();
-    if (data.success && data.data) {
-      setTokens(data.data.accessToken, data.data.refreshToken);
-      return data.data.accessToken;
-    }
-
-    clearTokens();
-    return null;
-  } catch {
-    clearTokens();
-    return null;
-  }
+  return refreshTokenPromise;
 }
 
 /**

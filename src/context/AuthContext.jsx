@@ -47,10 +47,11 @@ export function AuthProvider({ children }) {
       } else {
         setUser(userData);
       }
-    } catch {
-      clearTokens();
-      setUser(null);
-    } finally {
+    } catch (error) {
+      if (error && (error.status === 401 || error.status === 403)) {
+        clearTokens();
+        setUser(null);
+      }
       setIsLoading(false);
     }
   }, []);
