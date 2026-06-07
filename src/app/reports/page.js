@@ -135,7 +135,7 @@ export default function ReportsPage() {
             index + 1,
             new Date(row.createdAt).toLocaleDateString("id-ID"),
             row.nomorResi,
-            row.statusPesanan.toUpperCase(),
+            (row.statusPesanan || "").toUpperCase(),
             (row.pajak || 0).toLocaleString("id-ID"),
             (row.totalHarga || 0).toLocaleString("id-ID"),
             (row.marginKeuntungan || 0).toLocaleString("id-ID"),

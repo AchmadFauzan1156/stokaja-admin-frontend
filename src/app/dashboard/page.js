@@ -34,20 +34,19 @@ export default function DashboardPage() {
     const fetchDashboardData = async () => {
       try {
         setIsLoading(true);
-        // 1. Pesanan masuk
-        const resOrders = await apiGet("/transaksi?status=pending&limit=1");
-        
-        // 2. Dashboard Stats (untuk low stock produk & bahan baku)
-        const resStats = await apiGet("/dashboard/stats");
-        
-        // 3. Omzet dari Laporan
-        const resLaporan = await apiGet("/laporan");
-        
-        // 4. Transaksi Terbaru
-        const resLatest = await apiGet("/transaksi?limit=3");
-        
-        // 5. Data Grafik
-        const resGrafik = await apiGet("/grafik");
+        const results = await Promise.allSettled([
+          apiGet("/transaksi?status=pending&limit=1"),
+          apiGet("/dashboard/stats"),
+          apiGet("/laporan"),
+          apiGet("/transaksi?limit=3"),
+          apiGet("/grafik")
+        ]);
+
+        const resOrders = results[0].status === "fulfilled" ? results[0].value : {};
+        const resStats = results[1].status === "fulfilled" ? results[1].value : {};
+        const resLaporan = results[2].status === "fulfilled" ? results[2].value : {};
+        const resLatest = results[3].status === "fulfilled" ? results[3].value : {};
+        const resGrafik = results[4].status === "fulfilled" ? results[4].value : {};
 
         setStats({
           incomingOrders: resOrders.total || 0,
@@ -165,36 +164,38 @@ export default function DashboardPage() {
       </div>
 
       {/* Manajemen Data */}
-      <div className="mt-8 px-4">
-        <h2 className="mb-3 font-squadaOne text-[30px] text-[#6E822E]">
-          Manajemen Data
-        </h2>
-        <div className="grid grid-cols-3 gap-3">
-          <button 
-            onClick={() => router.push("/categories")}
-            className="flex flex-col items-center justify-center rounded-2xl border-2 border-[#D6D6D6] bg-[#F5F5F5] p-3 transition hover:border-[#B6D04E]"
-          >
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#E5F0B6] text-2xl">📁</div>
-            <span className="mt-2 text-center font-signika text-sm font-semibold text-[#444]">Kategori</span>
-          </button>
-          
-          <button 
-            onClick={() => router.push("/users")}
-            className="flex flex-col items-center justify-center rounded-2xl border-2 border-[#D6D6D6] bg-[#F5F5F5] p-3 transition hover:border-[#B6D04E]"
-          >
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#E5F0B6] text-2xl">👥</div>
-            <span className="mt-2 text-center font-signika text-sm font-semibold text-[#444]">Pengguna</span>
-          </button>
-          
-          <button 
-            onClick={() => router.push("/payments")}
-            className="flex flex-col items-center justify-center rounded-2xl border-2 border-[#D6D6D6] bg-[#F5F5F5] p-3 transition hover:border-[#B6D04E]"
-          >
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#E5F0B6] text-2xl">💳</div>
-            <span className="mt-2 text-center font-signika text-sm font-semibold text-[#444]">Metode Bayar</span>
-          </button>
+      {user?.role === "admin" && (
+        <div className="mt-8 px-4">
+          <h2 className="mb-3 font-squadaOne text-[30px] text-[#6E822E]">
+            Manajemen Data
+          </h2>
+          <div className="grid grid-cols-3 gap-3">
+            <button 
+              onClick={() => router.push("/categories")}
+              className="flex flex-col items-center justify-center rounded-2xl border-2 border-[#D6D6D6] bg-[#F5F5F5] p-3 transition hover:border-[#B6D04E]"
+            >
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#E5F0B6] text-2xl">📁</div>
+              <span className="mt-2 text-center font-signika text-sm font-semibold text-[#444]">Kategori</span>
+            </button>
+            
+            <button 
+              onClick={() => router.push("/users")}
+              className="flex flex-col items-center justify-center rounded-2xl border-2 border-[#D6D6D6] bg-[#F5F5F5] p-3 transition hover:border-[#B6D04E]"
+            >
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#E5F0B6] text-2xl">👥</div>
+              <span className="mt-2 text-center font-signika text-sm font-semibold text-[#444]">Pengguna</span>
+            </button>
+            
+            <button 
+              onClick={() => router.push("/payments")}
+              className="flex flex-col items-center justify-center rounded-2xl border-2 border-[#D6D6D6] bg-[#F5F5F5] p-3 transition hover:border-[#B6D04E]"
+            >
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#E5F0B6] text-2xl">💳</div>
+              <span className="mt-2 text-center font-signika text-sm font-semibold text-[#444]">Metode Bayar</span>
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Chart */}
       <div className="mt-8 px-4">
