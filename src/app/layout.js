@@ -47,6 +47,8 @@ export const viewport = {
   initialScale: 1,
 };
 
+import AutoLogout from "@/components/AutoLogout";
+
 export default function RootLayout({
   children,
 }) {
@@ -65,6 +67,7 @@ export default function RootLayout({
 
         <ToastProvider>
           <AuthProvider>
+            <AutoLogout />
             <GlobalSocketListener />
             <main
               className="
