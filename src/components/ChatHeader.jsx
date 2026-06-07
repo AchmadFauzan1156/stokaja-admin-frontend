@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function ChatHeader({ title = "Pelanggan", subtitle = "Online" }) {
+export default function ChatHeader({ title = "Pelanggan", subtitle = "Online", avatar = null }) {
 
   return (
     <div
@@ -41,12 +41,16 @@ export default function ChatHeader({ title = "Pelanggan", subtitle = "Online" })
           bg-[#B6D04E]
         "
       >
-        <Image
-          src="/Logo.svg"
-          alt="Store"
-          width={32}
-          height={32}
-        />
+        {avatar ? (
+          <img src={avatar} alt={title} className="h-full w-full object-cover" />
+        ) : (
+          <Image
+            src="/Logo.svg"
+            alt="Store"
+            width={32}
+            height={32}
+          />
+        )}
       </div>
 
       {/* Store Info */}

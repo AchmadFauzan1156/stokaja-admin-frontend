@@ -15,6 +15,7 @@ export default function ChatRoom({ userId }) {
   const { user } = useAuth();
   const [chats, setChats] = useState([]);
   const [contactName, setContactName] = useState("Pelanggan");
+  const [contactAvatar, setContactAvatar] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const chatEndRef = useRef(null);
 
@@ -26,10 +27,15 @@ export default function ChatRoom({ userId }) {
     const fetchHistory = async () => {
       try {
         setIsLoading(true);
-        // Fetch contacts to get name
+        // Fetch contacts to get name and avatar
         apiGet("/chat/contacts").then(res => {
           const contact = (res.data || []).find(c => c.pelanggan?._id === userId);
-          if (contact) setContactName(contact.pelanggan?.namaLengkap || contact.pelanggan?.email || "Pelanggan");
+          if (contact) {
+            setContactName(contact.pelanggan?.namaLengkap || contact.pelanggan?.email || "Pelanggan");
+            if (contact.pelanggan?.avatar) {
+              setContactAvatar(contact.pelanggan.avatar);
+            }
+          }
         }).catch(err => console.error("Gagal load kontak", err));
 
         const res = await apiGet(`/chat/history?pelangganId=${userId}`);
@@ -122,7 +128,7 @@ export default function ChatRoom({ userId }) {
   return (
     <div className="h-screen overflow-hidden bg-[#F6F3EA]">
       {/* Header */}
-      <ChatHeader title={contactName} subtitle="Online" />
+      <ChatHeader title={contactName} subtitle="Online" avatar={contactAvatar} />
 
       {/* Chat Area */}
       <div className="h-full overflow-y-auto px-4 pt-32 pb-72">

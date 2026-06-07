@@ -68,10 +68,18 @@ export default function ChatPage() {
               onClick={() => router.push(`/chat/${contact.pelanggan?._id}`)}
               className="flex items-center gap-4 border-b-2 border-[#D9D9D9] py-5 text-left"
             >
-              <div className="flex h-15 w-15 shrink-0 items-center justify-center rounded-full bg-[#D9D9D9]">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="h-8 w-8">
-                  <path d="M12 12a5 5 0 100-10 5 5 0 000 10zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5z"/>
-                </svg>
+              <div className="flex h-15 w-15 shrink-0 items-center justify-center rounded-full bg-[#D9D9D9] overflow-hidden">
+                {contact.pelanggan?.avatar ? (
+                  <img
+                    src={contact.pelanggan.avatar}
+                    alt="avatar"
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="h-8 w-8">
+                    <path d="M12 12a5 5 0 100-10 5 5 0 000 10zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5z"/>
+                  </svg>
+                )}
               </div>
 
               <div className="flex-1 overflow-hidden">
