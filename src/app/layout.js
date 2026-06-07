@@ -52,13 +52,10 @@ export default function RootLayout({
 }) {
 
   return (
-    <html lang="en">
+    <html lang="en" className={`${squadaOne.variable} ${signika.variable}`}>
 
       <body
         className={`
-          ${squadaOne.variable}
-          ${signika.variable}
-
           bg-[#1E1E1E]
 
           overflow-x-hidden
