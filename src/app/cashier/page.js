@@ -150,10 +150,18 @@ export default function CashierPage() {
     setIsSubmitting(true);
 
     try {
+      const validCart = cart.filter(c => Number(c.qty) > 0);
+      
+      if (validCart.length === 0) {
+        showError("Keranjang tidak boleh kosong atau berisi kuantitas nol.");
+        setIsSubmitting(false);
+        return;
+      }
+
       const payload = {
-        isiKeranjang: cart.map(c => ({
+        isiKeranjang: validCart.map(c => ({
           produkId: c._id,
-          jumlahBeli: Number(c.qty) || 1,
+          jumlahBeli: Number(c.qty),
           tipeItem: c.tipeItem || 'Product'
         })),
         metodePembayaran: paymentMethod,
